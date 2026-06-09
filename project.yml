@@ -1,0 +1,44 @@
+name: BetterClip
+options:
+  deploymentTarget:
+    macOS: "14.0"
+  bundleIdPrefix: com.betterclip
+  createIntermediateGroups: true
+targets:
+  BetterClip:
+    type: application
+    platform: macOS
+    sources:
+      - BetterClip
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.betterclip.app
+      MACOSX_DEPLOYMENT_TARGET: "14.0"
+      INFOPLIST_FILE: BetterClip/Resources/Info.plist
+      CODE_SIGN_ENTITLEMENTS: BetterClip/Resources/BetterClip.entitlements
+      SWIFT_VERSION: "5.9"
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGNING_REQUIRED: "NO"
+    dependencies:
+      - package: GRDB
+      - package: KeyboardShortcuts
+      - package: LaunchAtLogin
+  BetterClipTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - BetterClipTests
+    settings:
+      MACOSX_DEPLOYMENT_TARGET: "14.0"
+      GENERATE_INFOPLIST_FILE: "YES"
+    dependencies:
+      - target: BetterClip
+packages:
+  GRDB:
+    url: https://github.com/groue/GRDB.swift
+    from: 6.0.0
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    from: 2.0.0
+  LaunchAtLogin:
+    url: https://github.com/sindresorhus/LaunchAtLogin-Modern
+    from: 1.0.0

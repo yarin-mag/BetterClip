@@ -1,0 +1,3 @@
+# BetterClip
+
+macOS clipboard manager.
