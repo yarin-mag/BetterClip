@@ -29,7 +29,7 @@ brew upgrade betterclip
 ### npm
 
 ```bash
-npm install -g betterclip
+npm install -g @betterclip/betterclip
 ```
 
 ### Manual

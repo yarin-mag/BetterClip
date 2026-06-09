@@ -5,13 +5,13 @@ This is an npm package that downloads and installs BetterClip for macOS.
 ## Installation
 
 ```bash
-npm install -g betterclip
+npm install -g @betterclip/betterclip
 ```
 
 Or with yarn:
 
 ```bash
-yarn global add betterclip
+yarn global add @betterclip/betterclip
 ```
 
 ## What it does
@@ -62,7 +62,7 @@ open -a BetterClip
 
 ```bash
 rm -rf /Applications/BetterClip.app
-npm uninstall -g betterclip
+npm uninstall -g @betterclip/betterclip
 ```
 
 ## More Info
