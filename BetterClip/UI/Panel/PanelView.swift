@@ -22,12 +22,17 @@ struct PanelView: View {
             }
         }
         .onAppear { }
+        .sheet(item: $viewModel.clipToSaveAsSnippet) { clip in
+            SnippetEditorView(prefillContent: clip.textContent ?? "") {
+                viewModel.refresh(query: viewModel.searchQuery)
+            }
+        }
     }
 
     private var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
-            TextField("Search clipboardâ€¦", text: $viewModel.searchQuery)
+            TextField("Search clipboard…", text: $viewModel.searchQuery)
                 .textFieldStyle(.plain)
                 .font(.system(size: 14))
                 .focused($searchFocused)
@@ -92,7 +97,7 @@ struct PanelView: View {
                     .onTapGesture { viewModel.selectedIndex = index }
                     .contextMenu {
                         Button("Paste") { viewModel.pasteClip(clip) }
-                        Button("Save as Snippetâ€¦") { viewModel.showSaveAsSnippet(clip: clip) }
+                        Button("Save as Snippet…") { viewModel.showSaveAsSnippet(clip: clip) }
                         Divider()
                         Button("Delete", role: .destructive) { viewModel.deleteClip(clip) }
                     }

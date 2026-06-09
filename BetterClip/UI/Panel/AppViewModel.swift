@@ -18,6 +18,7 @@ final class AppViewModel: ObservableObject {
     @Published var expandedFolderIds: Set<Int64> = []
     @Published var selectedTab: PanelTab = .history
     @Published var selectedIndex: Int = 0
+    @Published var clipToSaveAsSnippet: Clip? = nil
 
     let shouldClosePanel = PassthroughSubject<Void, Never>()
     var previousApp: NSRunningApplication?
@@ -144,6 +145,9 @@ final class AppViewModel: ObservableObject {
         }
     }
 
+    func showSaveAsSnippet(clip: Clip) {
+        clipToSaveAsSnippet = clip
+    }
 
     private func triggerPasteAndClose() {
         let pid = previousApp?.processIdentifier
