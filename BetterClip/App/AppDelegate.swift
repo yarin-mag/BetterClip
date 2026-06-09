@@ -8,11 +8,12 @@ extension KeyboardShortcuts.Name {
     static let togglePanel = Self("togglePanel", default: .init(.v, modifiers: [.command, .shift]))
 }
 
-@NSApplicationMain
+@main
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var panelController: PanelController!
     private var preferencesWindow: NSWindow?
+    private var snippetsWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupMenuBar()
@@ -42,16 +43,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func setupHotkey() {
-        KeyboardShortcuts.onKeyUp(for: .togglePanel) { [weak self] in
+        KeyboardShortcuts.onKeyDown(for: .togglePanel) { [weak self] in
+            // Capture frontmost app NOW, before BetterClip activates.
+            let app = NSWorkspace.shared.frontmostApplication
+            self?.panelController.capturedPreviousApp = app
             self?.togglePanel()
         }
     }
 
     @objc func togglePanel() {
-        panelController.toggle()
+        if Preferences.shared.layoutMode == .popover,
+           let button = statusItem.button {
+            panelController.showPopover(from: button)
+        } else {
+            panelController.toggle()
+        }
     }
 
     @objc func openSnippetManager() {
+        if snippetsWindow?.isVisible ?? false {
+            snippetsWindow?.makeKeyAndOrderFront(nil)
+            return
+        }
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 600, height: 440),
             styleMask: [.titled, .closable, .resizable],
@@ -62,19 +75,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.contentView = NSHostingView(rootView: SnippetManagerView())
         window.center()
         window.makeKeyAndOrderFront(nil)
+        snippetsWindow = window
     }
 
     @objc func openPreferences() {
         if preferencesWindow == nil {
-            preferencesWindow = NSWindow(
+            let window = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 400, height: 320),
                 styleMask: [.titled, .closable],
                 backing: .buffered,
                 defer: false
             )
-            preferencesWindow?.title = "BetterClip Preferences"
-            preferencesWindow?.contentView = NSHostingView(rootView: PreferencesView())
-            preferencesWindow?.center()
+            window.title = "BetterClip Preferences"
+            window.isReleasedWhenClosed = false
+            window.contentView = NSHostingView(rootView: PreferencesView())
+            window.center()
+            preferencesWindow = window
         }
         preferencesWindow?.makeKeyAndOrderFront(nil)
     }
@@ -82,5 +98,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func requestAccessibilityIfNeeded() {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true]
         AXIsProcessTrustedWithOptions(options)
+    }
+
+    static func main() {
+        let app = NSApplication.shared
+        let delegate = AppDelegate()
+        app.delegate = delegate
+        app.run()
     }
 }
