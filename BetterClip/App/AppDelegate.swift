@@ -12,6 +12,7 @@ extension KeyboardShortcuts.Name {
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var panelController: PanelController!
+    private var preferencesWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupMenuBar()
@@ -64,7 +65,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func openPreferences() {
-        // Opened in Task 16
+        if preferencesWindow == nil {
+            preferencesWindow = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 400, height: 320),
+                styleMask: [.titled, .closable],
+                backing: .buffered,
+                defer: false
+            )
+            preferencesWindow?.title = "BetterClip Preferences"
+            preferencesWindow?.contentView = NSHostingView(rootView: PreferencesView())
+            preferencesWindow?.center()
+        }
+        preferencesWindow?.makeKeyAndOrderFront(nil)
     }
 
     private func requestAccessibilityIfNeeded() {
