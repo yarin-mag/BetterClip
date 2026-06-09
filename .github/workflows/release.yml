@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG#v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Update Info.plist with version
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          PLIST_PATH="BetterClip/Resources/Info.plist"
+          
+          # Update CFBundleShortVersionString
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$PLIST_PATH"
+          
+          # Update CFBundleVersion (use full version without dots for build number)
+          BUILD_NUMBER=$(echo "$VERSION" | tr -d '.')
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$PLIST_PATH"
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build app
+        run: |
+          xcodebuild build \
+            -project BetterClip.xcodeproj \
+            -scheme BetterClip \
+            -configuration Release \
+            -derivedDataPath build
+
+      - name: Create DMG
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          APP_PATH="build/Build/Products/Release/BetterClip.app"
+          DMG_NAME="BetterClip-${VERSION}.dmg"
+          
+          # Create a temporary directory for DMG contents
+          mkdir -p DMGTemp
+          cp -r "$APP_PATH" DMGTemp/
+          ln -s /Applications DMGTemp/
+          
+          # Create DMG using hdiutil
+          hdiutil create \
+            -volname "BetterClip" \
+            -srcfolder DMGTemp \
+            -ov \
+            -format UDZO \
+            "$DMG_NAME"
+          
+          # Verify DMG was created
+          ls -lh "$DMG_NAME"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: BetterClip-${{ steps.version.outputs.version }}.dmg
+          draft: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf DMGTemp
+          rm -rf build
