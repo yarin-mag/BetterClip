@@ -1,0 +1,15 @@
+# Xcode
+DerivedData/
+*.xcuserdata/
+*.xcuserstate
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Build artifacts
+*.dSYM/
+*.dSYM.zip
