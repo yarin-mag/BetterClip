@@ -1,5 +1,6 @@
 // BetterClip/App/AppDelegate.swift
 import AppKit
+import SwiftUI
 import KeyboardShortcuts
 import LaunchAtLogin
 
@@ -50,7 +51,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func openSnippetManager() {
-        // Opened in Task 15
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 600, height: 440),
+            styleMask: [.titled, .closable, .resizable],
+            backing: .buffered,
+            defer: false
+        )
+        window.title = "Snippets"
+        window.contentView = NSHostingView(rootView: SnippetManagerView())
+        window.center()
+        window.makeKeyAndOrderFront(nil)
     }
 
     @objc func openPreferences() {
