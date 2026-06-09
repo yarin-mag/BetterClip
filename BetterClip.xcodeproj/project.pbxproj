@@ -1,0 +1,605 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1E04501D5D3482FF79B7711E /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F302B5FABDCB7BEC71ABDE21 /* DatabaseTests.swift */; };
+		267EE33A0AECB2F7DEC0AE62 /* BlobStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAA451667582D66AEC916C7 /* BlobStore.swift */; };
+		2D57F9D8FFC03E0A4DD90D7C /* PanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6AAB081C79D624F2889C05 /* PanelController.swift */; };
+		3D7FBDB758D54784FD0B9751 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 8941B3969F7C0F748852FEBD /* KeyboardShortcuts */; };
+		417FAFEAE5C435D0F0012C86 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4258C4837D7A4A0D612549D0 /* AppViewModel.swift */; };
+		434D9CA25204E4781DAEEB1D /* SnippetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBFF60A62CE03596871C7B2 /* SnippetEditorView.swift */; };
+		459C1699F6C36ACAECF029BA /* SnippetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D400D029E6B008AEA4AE437A /* SnippetRowView.swift */; };
+		4DC4AAB8F29D0797C2A78C4E /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BB88854DEE4C83BD403EF9 /* PreferencesView.swift */; };
+		4F621545CAAD972051018888 /* Clip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53ABE9DF4848B0742565CFC3 /* Clip.swift */; };
+		5EF8F1579ACE7A4E47CB6448 /* BlobStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604A610410DD0B4F9A9F09D9 /* BlobStoreTests.swift */; };
+		6199F9F91644C4B80756B0A5 /* SnippetFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525AB9C6489A16F69C2AEF21 /* SnippetFolder.swift */; };
+		626BA68BBDD7C8FBBC2A5ABA /* SnippetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863BFB010F056EC3669DB953 /* SnippetStore.swift */; };
+		67AF7E0E771EFDCB8E1A0129 /* PanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5F46D1D2B0003196339BE /* PanelView.swift */; };
+		68A2A2F103389CE750D2C428 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E689FDB2D48D39E2B73C0C9 /* AppDelegate.swift */; };
+		7489833E66AA918D4900A9A2 /* FolderTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B02F6D2A71F6C1FBC052A6 /* FolderTreeView.swift */; };
+		8AB829FA9D7C37F5824DE8E8 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C2BD521FBDBD9B10D1298A /* Preferences.swift */; };
+		91F33F0B5ED253DF41EA0E7B /* Snippet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43784CD04E7CE8FDB962B6E5 /* Snippet.swift */; };
+		94591235ED6659CE6BC68EAC /* PasteboardWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0C600D0A10810269CEF8A6 /* PasteboardWriter.swift */; };
+		A23FA0190F38B3048229620C /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = B958723484BB54B65E868E10 /* LaunchAtLogin */; };
+		B2A03B6337972DDD74D0C338 /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D292DB7A19A6B865B4197B6 /* ClipboardMonitor.swift */; };
+		F489C2AC8B2BFDA4A3DB6F3A /* ClipRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D033245F391F039E691F6F /* ClipRowView.swift */; };
+		F48DCF31C909C8F6DD381665 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B80A994641706B04B804 /* Database.swift */; };
+		FBBCC28AFC9C471B62C8B7CE /* PreviewPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567586B6F931D0DCECB0CCE /* PreviewPane.swift */; };
+		FDACCDA473877E807DCB3541 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = AAF4932EFE9715E3F33F48DE /* GRDB */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		544F4B01482870F64FF666D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA09F7BDC916C294CC0ED34F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5E9350B5978036DA92E2C478;
+			remoteInfo = BetterClip;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		05B02F6D2A71F6C1FBC052A6 /* FolderTreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTreeView.swift; sourceTree = "<group>"; };
+		1EBFF60A62CE03596871C7B2 /* SnippetEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetEditorView.swift; sourceTree = "<group>"; };
+		2FA7B80A994641706B04B804 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		36C2BD521FBDBD9B10D1298A /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		3E689FDB2D48D39E2B73C0C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4258C4837D7A4A0D612549D0 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		43784CD04E7CE8FDB962B6E5 /* Snippet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snippet.swift; sourceTree = "<group>"; };
+		4567586B6F931D0DCECB0CCE /* PreviewPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPane.swift; sourceTree = "<group>"; };
+		525AB9C6489A16F69C2AEF21 /* SnippetFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetFolder.swift; sourceTree = "<group>"; };
+		53ABE9DF4848B0742565CFC3 /* Clip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clip.swift; sourceTree = "<group>"; };
+		604A610410DD0B4F9A9F09D9 /* BlobStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlobStoreTests.swift; sourceTree = "<group>"; };
+		72BB88854DEE4C83BD403EF9 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		7A0DD2C6B9AA8D7BF8D4F169 /* BetterClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BetterClip.entitlements; sourceTree = "<group>"; };
+		863BFB010F056EC3669DB953 /* SnippetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetStore.swift; sourceTree = "<group>"; };
+		8D292DB7A19A6B865B4197B6 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
+		90F5F46D1D2B0003196339BE /* PanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelView.swift; sourceTree = "<group>"; };
+		CDAA451667582D66AEC916C7 /* BlobStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlobStore.swift; sourceTree = "<group>"; };
+		CEDE14C330A0F5825F4B9B6E /* BetterClipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BetterClipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3D2F321CE3826B7C50BEB17 /* BetterClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D400D029E6B008AEA4AE437A /* SnippetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetRowView.swift; sourceTree = "<group>"; };
+		DE6AAB081C79D624F2889C05 /* PanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelController.swift; sourceTree = "<group>"; };
+		E1D033245F391F039E691F6F /* ClipRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipRowView.swift; sourceTree = "<group>"; };
+		EC0C600D0A10810269CEF8A6 /* PasteboardWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardWriter.swift; sourceTree = "<group>"; };
+		F302B5FABDCB7BEC71ABDE21 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
+		FB1D88AC7026E9ED400ADB77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5459EA3EA807DD7F5C64C626 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDACCDA473877E807DCB3541 /* GRDB in Frameworks */,
+				3D7FBDB758D54784FD0B9751 /* KeyboardShortcuts in Frameworks */,
+				A23FA0190F38B3048229620C /* LaunchAtLogin in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		44F2A79D83528A423947C8C5 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				72BB88854DEE4C83BD403EF9 /* PreferencesView.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		4AB5CC09EC691D921663B490 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				CDAA451667582D66AEC916C7 /* BlobStore.swift */,
+				8D292DB7A19A6B865B4197B6 /* ClipboardMonitor.swift */,
+				2FA7B80A994641706B04B804 /* Database.swift */,
+				EC0C600D0A10810269CEF8A6 /* PasteboardWriter.swift */,
+				36C2BD521FBDBD9B10D1298A /* Preferences.swift */,
+				863BFB010F056EC3669DB953 /* SnippetStore.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		54B292AA4DD5EAC151AAAEF4 /* Panel */ = {
+			isa = PBXGroup;
+			children = (
+				4258C4837D7A4A0D612549D0 /* AppViewModel.swift */,
+				E1D033245F391F039E691F6F /* ClipRowView.swift */,
+				DE6AAB081C79D624F2889C05 /* PanelController.swift */,
+				90F5F46D1D2B0003196339BE /* PanelView.swift */,
+				4567586B6F931D0DCECB0CCE /* PreviewPane.swift */,
+				D400D029E6B008AEA4AE437A /* SnippetRowView.swift */,
+			);
+			path = Panel;
+			sourceTree = "<group>";
+		};
+		5BD909E77DA23604722840E1 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				3E689FDB2D48D39E2B73C0C9 /* AppDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		7CFE50950024407636336A53 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7A0DD2C6B9AA8D7BF8D4F169 /* BetterClip.entitlements */,
+				FB1D88AC7026E9ED400ADB77 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		7F3D2DB4B58AB5C5325FCD34 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				54B292AA4DD5EAC151AAAEF4 /* Panel */,
+				44F2A79D83528A423947C8C5 /* Preferences */,
+				D6562D9359382E05B1797D4E /* Snippets */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		871BE07C68B94BB2CE0A1AC3 = {
+			isa = PBXGroup;
+			children = (
+				E04030829C6E8F642673500B /* BetterClip */,
+				D30532558F4AA4E7B2CD66DA /* BetterClipTests */,
+				ABE74571DAB081EAF0867BD9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		ABE74571DAB081EAF0867BD9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D3D2F321CE3826B7C50BEB17 /* BetterClip.app */,
+				CEDE14C330A0F5825F4B9B6E /* BetterClipTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D30532558F4AA4E7B2CD66DA /* BetterClipTests */ = {
+			isa = PBXGroup;
+			children = (
+				604A610410DD0B4F9A9F09D9 /* BlobStoreTests.swift */,
+				F302B5FABDCB7BEC71ABDE21 /* DatabaseTests.swift */,
+			);
+			path = BetterClipTests;
+			sourceTree = "<group>";
+		};
+		D6562D9359382E05B1797D4E /* Snippets */ = {
+			isa = PBXGroup;
+			children = (
+				05B02F6D2A71F6C1FBC052A6 /* FolderTreeView.swift */,
+				1EBFF60A62CE03596871C7B2 /* SnippetEditorView.swift */,
+			);
+			path = Snippets;
+			sourceTree = "<group>";
+		};
+		E04030829C6E8F642673500B /* BetterClip */ = {
+			isa = PBXGroup;
+			children = (
+				5BD909E77DA23604722840E1 /* App */,
+				4AB5CC09EC691D921663B490 /* Core */,
+				EA73B1FCA0B79CE0AB811DB2 /* Models */,
+				7CFE50950024407636336A53 /* Resources */,
+				7F3D2DB4B58AB5C5325FCD34 /* UI */,
+			);
+			path = BetterClip;
+			sourceTree = "<group>";
+		};
+		EA73B1FCA0B79CE0AB811DB2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				53ABE9DF4848B0742565CFC3 /* Clip.swift */,
+				43784CD04E7CE8FDB962B6E5 /* Snippet.swift */,
+				525AB9C6489A16F69C2AEF21 /* SnippetFolder.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5E9350B5978036DA92E2C478 /* BetterClip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D626683C5F6C47610EA9E061 /* Build configuration list for PBXNativeTarget "BetterClip" */;
+			buildPhases = (
+				668C4DF2D3E4F4F4B855FE0A /* Sources */,
+				5459EA3EA807DD7F5C64C626 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BetterClip;
+			packageProductDependencies = (
+				AAF4932EFE9715E3F33F48DE /* GRDB */,
+				8941B3969F7C0F748852FEBD /* KeyboardShortcuts */,
+				B958723484BB54B65E868E10 /* LaunchAtLogin */,
+			);
+			productName = BetterClip;
+			productReference = D3D2F321CE3826B7C50BEB17 /* BetterClip.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BF1A6576390E423772FBD084 /* BetterClipTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28D499FA3BCCD7DB219E0AF7 /* Build configuration list for PBXNativeTarget "BetterClipTests" */;
+			buildPhases = (
+				C49EDA6C71F689D21E830F38 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3434AB4845E63774A9054653 /* PBXTargetDependency */,
+			);
+			name = BetterClipTests;
+			packageProductDependencies = (
+			);
+			productName = BetterClipTests;
+			productReference = CEDE14C330A0F5825F4B9B6E /* BetterClipTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DA09F7BDC916C294CC0ED34F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = B372B98A918BD56EDE82F981 /* Build configuration list for PBXProject "BetterClip" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 871BE07C68B94BB2CE0A1AC3;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				54DEB1BD08E9486B71C366C4 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				4FEB9C9EEAEAE35D7C4587FA /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				D662A7E55E0A723810809D53 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = ABE74571DAB081EAF0867BD9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5E9350B5978036DA92E2C478 /* BetterClip */,
+				BF1A6576390E423772FBD084 /* BetterClipTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		668C4DF2D3E4F4F4B855FE0A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				68A2A2F103389CE750D2C428 /* AppDelegate.swift in Sources */,
+				417FAFEAE5C435D0F0012C86 /* AppViewModel.swift in Sources */,
+				267EE33A0AECB2F7DEC0AE62 /* BlobStore.swift in Sources */,
+				4F621545CAAD972051018888 /* Clip.swift in Sources */,
+				F489C2AC8B2BFDA4A3DB6F3A /* ClipRowView.swift in Sources */,
+				B2A03B6337972DDD74D0C338 /* ClipboardMonitor.swift in Sources */,
+				F48DCF31C909C8F6DD381665 /* Database.swift in Sources */,
+				7489833E66AA918D4900A9A2 /* FolderTreeView.swift in Sources */,
+				2D57F9D8FFC03E0A4DD90D7C /* PanelController.swift in Sources */,
+				67AF7E0E771EFDCB8E1A0129 /* PanelView.swift in Sources */,
+				94591235ED6659CE6BC68EAC /* PasteboardWriter.swift in Sources */,
+				8AB829FA9D7C37F5824DE8E8 /* Preferences.swift in Sources */,
+				4DC4AAB8F29D0797C2A78C4E /* PreferencesView.swift in Sources */,
+				FBBCC28AFC9C471B62C8B7CE /* PreviewPane.swift in Sources */,
+				91F33F0B5ED253DF41EA0E7B /* Snippet.swift in Sources */,
+				434D9CA25204E4781DAEEB1D /* SnippetEditorView.swift in Sources */,
+				6199F9F91644C4B80756B0A5 /* SnippetFolder.swift in Sources */,
+				459C1699F6C36ACAECF029BA /* SnippetRowView.swift in Sources */,
+				626BA68BBDD7C8FBBC2A5ABA /* SnippetStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C49EDA6C71F689D21E830F38 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EF8F1579ACE7A4E47CB6448 /* BlobStoreTests.swift in Sources */,
+				1E04501D5D3482FF79B7711E /* DatabaseTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3434AB4845E63774A9054653 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5E9350B5978036DA92E2C478 /* BetterClip */;
+			targetProxy = 544F4B01482870F64FF666D7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		10F3540279CEA0BE41EFDF76 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		5063A8C411D6D7B89949F6B1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = BetterClip/Resources/BetterClip.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = BetterClip/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.betterclip.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		5B72F2CB704BCD14EB562452 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = BetterClip/Resources/BetterClip.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = BetterClip/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.betterclip.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		619A6DF38662A748EEB15314 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C7BCA2E87F9C10A73751A490 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.betterclip.BetterClipTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BetterClip.app/Contents/MacOS/BetterClip";
+			};
+			name = Release;
+		};
+		FC6898C168857923623B03CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.betterclip.BetterClipTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BetterClip.app/Contents/MacOS/BetterClip";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		28D499FA3BCCD7DB219E0AF7 /* Build configuration list for PBXNativeTarget "BetterClipTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC6898C168857923623B03CF /* Debug */,
+				C7BCA2E87F9C10A73751A490 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B372B98A918BD56EDE82F981 /* Build configuration list for PBXProject "BetterClip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				619A6DF38662A748EEB15314 /* Debug */,
+				10F3540279CEA0BE41EFDF76 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D626683C5F6C47610EA9E061 /* Build configuration list for PBXNativeTarget "BetterClip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5063A8C411D6D7B89949F6B1 /* Debug */,
+				5B72F2CB704BCD14EB562452 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4FEB9C9EEAEAE35D7C4587FA /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		54DEB1BD08E9486B71C366C4 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+		D662A7E55E0A723810809D53 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8941B3969F7C0F748852FEBD /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4FEB9C9EEAEAE35D7C4587FA /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+		AAF4932EFE9715E3F33F48DE /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54DEB1BD08E9486B71C366C4 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+		B958723484BB54B65E868E10 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D662A7E55E0A723810809D53 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
+			productName = LaunchAtLogin;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = DA09F7BDC916C294CC0ED34F /* Project object */;
+}
