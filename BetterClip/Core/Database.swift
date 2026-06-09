@@ -212,4 +212,26 @@ final class Database {
             try db.execute(sql: "DELETE FROM snippet_folders WHERE id = ?", arguments: [id])
         }
     }
+
+    // MARK: - Clean History
+
+    func deleteAllClips() throws -> (clipsDeleted: Int, blobsCleaned: Int) {
+        try queue.write { db in
+            // Get all blob hashes from clips before deletion
+            let clipBlobHashes = try db.fetch(sql: """
+                SELECT DISTINCT blobHash FROM clips WHERE blobHash IS NOT NULL
+            """).compactMap { $0["blobHash"] as? String }.filter { !$0.isEmpty }
+
+            // Delete all clips
+            let clipsDeleted = try db.execute(sql: "DELETE FROM clips")
+
+            // Clean up blobs from disk (snippets store content as text, not as blobs)
+            let blobStore = BlobStore.shared
+            for hash in clipBlobHashes {
+                blobStore.delete(hash: hash)
+            }
+
+            return (clipsDeleted: clipsDeleted, blobsCleaned: clipBlobHashes.count)
+        }
+    }
 }
