@@ -12,10 +12,34 @@ A native macOS menu-bar clipboard manager with searchable history, saved snippet
 - Auto-paste into the previously focused application
 - Launch at login and configurable history limits
 
+## Installation
+
+### Homebrew (Recommended)
+
+```bash
+brew tap yarin-mag/betterclip
+brew install betterclip
+```
+
+To upgrade:
+```bash
+brew upgrade betterclip
+```
+
+### npm
+
+```bash
+npm install -g betterclip
+```
+
+### Manual
+
+Download the latest `.dmg` from [GitHub Releases](https://github.com/yarin-mag/BetterClip/releases), mount it, and drag `BetterClip.app` to `/Applications`.
+
 ## Requirements
 
 - macOS 14.0+
-- Xcode 15+
+- Xcode 15+ (for development)
 
 ## Build
 
