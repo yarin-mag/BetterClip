@@ -225,8 +225,11 @@ final class Database {
                 row["blobHash"] as? String
             }.filter { !$0.isEmpty }
 
+            // Count clips before deletion
+            let countBefore = try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM clips") ?? 0
+
             // Delete all clips
-            let clipsDeleted = try db.execute(sql: "DELETE FROM clips")
+            try db.execute(sql: "DELETE FROM clips")
 
             // Clean up blobs from disk
             let blobStore = BlobStore.shared
@@ -234,7 +237,7 @@ final class Database {
                 blobStore.delete(hash: hash)
             }
 
-            return (clipsDeleted: clipsDeleted, blobsCleaned: clipBlobHashes.count)
+            return (clipsDeleted: countBefore, blobsCleaned: clipBlobHashes.count)
         }
     }
 }
