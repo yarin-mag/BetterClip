@@ -1,6 +1,6 @@
 {
   "name": "@betterclip/betterclip",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Smart clipboard manager for macOS with snippets and history search",
   "repository": "https://github.com/yarin-mag/BetterClip",
   "homepage": "https://github.com/yarin-mag/BetterClip",

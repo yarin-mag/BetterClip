@@ -6,9 +6,9 @@ const path = require('path');
 const { execSync } = require('child_process');
 const os = require('os');
 
-const VERSION = '1.0.1';
+const VERSION = '1.0.2';
 const REPO = 'yarin-mag/BetterClip';
-const DMG_URL = `https://github.com/${REPO}/releases/download/v${VERSION}/BetterClip.dmg`;
+const DMG_URL = `https://github.com/${REPO}/releases/download/v${VERSION}/BetterClip-${VERSION}.dmg`;
 const TEMP_DIR = path.join(os.tmpdir(), 'betterclip-install');
 const DMG_PATH = path.join(TEMP_DIR, 'BetterClip.dmg');
 const MOUNT_POINT = path.join(TEMP_DIR, 'mount');
@@ -19,6 +19,7 @@ async function downloadFile(url, dest) {
     const file = fs.createWriteStream(dest);
     https.get(url, (response) => {
       if (response.statusCode === 302 || response.statusCode === 301) {
+        file.close();
         return downloadFile(response.headers.location, dest).then(resolve, reject);
       }
       response.pipe(file);
