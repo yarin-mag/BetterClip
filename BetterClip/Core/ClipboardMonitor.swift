@@ -11,10 +11,11 @@ final class ClipboardMonitor {
     private var timer: Timer?
 
     func start() {
-        timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { [weak self] _ in
+        let t = Timer(timeInterval: 0.3, repeats: true) { [weak self] _ in
             self?.poll()
         }
-        RunLoop.main.add(timer!, forMode: .common)
+        RunLoop.main.add(t, forMode: .common)
+        timer = t
     }
 
     func stop() {

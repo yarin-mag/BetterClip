@@ -124,6 +124,15 @@ final class DatabaseTests: XCTestCase {
         XCTAssertEqual(clips.count, 0)
     }
 
+    func testRecoveryFromCorruptDatabase() throws {
+        let tmp = FileManager.default.temporaryDirectory
+            .appendingPathComponent("corrupt-\(UUID().uuidString).sqlite")
+        try "not a sqlite file".write(to: tmp, atomically: true, encoding: .utf8)
+        XCTAssertThrowsError(try Database(path: tmp.path),
+            "Opening a corrupt SQLite file must throw, not crash")
+        try? FileManager.default.removeItem(at: tmp)
+    }
+
     func testCleanHistoryCountsBlobsCorrectly() throws {
         // Create clips with blob hashes
         var c1 = Clip(id: nil, type: .image, textContent: nil,

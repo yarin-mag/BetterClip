@@ -1,9 +1,11 @@
 // BetterClip/UI/Panel/PanelView.swift
+import AppKit
 import SwiftUI
 
 struct PanelView: View {
     @ObservedObject var viewModel: AppViewModel
     @FocusState private var searchFocused: Bool
+    @State private var showClearHistoryConfirm = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -52,9 +54,45 @@ struct PanelView: View {
             tabButton("History", tab: .history)
             tabButton("Snippets", tab: .snippets)
             Spacer()
+            tabActionButton
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
+        .alert("Clear Clipboard History?", isPresented: $showClearHistoryConfirm) {
+            Button("Clear", role: .destructive) { viewModel.clearHistory() }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Permanently deletes all clipboard history. Snippets are not affected.")
+        }
+    }
+
+    @ViewBuilder
+    private var tabActionButton: some View {
+        if viewModel.selectedTab == .history {
+            Button {
+                showClearHistoryConfirm = true
+            } label: {
+                Image(systemName: "trash")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .help("Clear clipboard history")
+        } else {
+            Button {
+                NSApp.sendAction(#selector(AppDelegate.openSnippetManager), to: nil, from: nil)
+            } label: {
+                Image(systemName: "square.and.pencil")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .help("Manage snippets")
+        }
     }
 
     private func tabButton(_ title: String, tab: PanelTab) -> some View {

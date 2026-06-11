@@ -20,7 +20,7 @@ struct PreviewPane: View {
     @ViewBuilder
     private var clipPreview: some View {
         let idx = viewModel.selectedIndex
-        if idx < viewModel.clips.count {
+        if idx >= 0, idx < viewModel.clips.count {
             let clip = viewModel.clips[idx]
             switch clip.type {
             case .image:
@@ -36,7 +36,7 @@ struct PreviewPane: View {
     @ViewBuilder
     private var snippetPreview: some View {
         let idx = viewModel.selectedIndex
-        if idx < viewModel.snippets.count {
+        if idx >= 0, idx < viewModel.snippets.count {
             let snippet = viewModel.snippets[idx]
             VStack(alignment: .leading, spacing: 8) {
                 Text(snippet.name).font(.headline)

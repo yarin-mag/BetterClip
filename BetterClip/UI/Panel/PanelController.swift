@@ -63,6 +63,8 @@ final class PanelController {
     private var popover: NSPopover?
     private let viewModel = AppViewModel()
     private var cancellables = Set<AnyCancellable>()
+    private var panelCancellables = Set<AnyCancellable>()
+    private var panelResignObserver: NSObjectProtocol?
     var capturedPreviousApp: NSRunningApplication?
     private weak var hostingView: KeyAcceptingHostingView?
 
@@ -112,13 +114,14 @@ final class PanelController {
         effect.addSubview(hostingView)
         p.contentView = effect
 
+        panelCancellables.removeAll()
         viewModel.shouldClosePanel
             .sink { [weak p] in p?.orderOut(nil) }
-            .store(in: &cancellables)
+            .store(in: &panelCancellables)
 
         p.center()
         p.makeFirstResponder(hostingView)
-        p.orderFront(nil)
+        p.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         panel = p
 
@@ -148,7 +151,8 @@ final class PanelController {
         p.contentView?.layer?.cornerRadius = 12
         p.contentView?.layer?.masksToBounds = true
 
-        NotificationCenter.default.addObserver(
+        panelResignObserver.flatMap { NotificationCenter.default.removeObserver($0) }
+        panelResignObserver = NotificationCenter.default.addObserver(
             forName: NSWindow.didResignKeyNotification, object: p, queue: .main
         ) { [weak p] _ in p?.orderOut(nil) }
 

@@ -99,6 +99,7 @@ final class AppViewModel: ObservableObject {
 
     func moveSelectionDown() {
         let count = selectedTab == .history ? clips.count : snippetPanelItems.count
+        guard count > 0 else { return }
         selectedIndex = min(count - 1, selectedIndex + 1)
     }
 
@@ -126,7 +127,7 @@ final class AppViewModel: ObservableObject {
     func pasteSelected() {
         switch selectedTab {
         case .history:
-            guard selectedIndex < clips.count else { return }
+            guard selectedIndex >= 0, selectedIndex < clips.count else { return }
             let clip = clips[selectedIndex]
             PasteboardWriter.write(clip: clip)
             if let id = clip.id { try? Database.shared.updateClipLastUsed(id: id) }
@@ -143,6 +144,11 @@ final class AppViewModel: ObservableObject {
                 triggerPasteAndClose()
             }
         }
+    }
+
+    func clearHistory() {
+        try? Database.shared.deleteAllClips()
+        refresh(query: searchQuery)
     }
 
     func showSaveAsSnippet(clip: Clip) {

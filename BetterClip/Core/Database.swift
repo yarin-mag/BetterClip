@@ -7,16 +7,20 @@ final class Database {
         let appSupport = FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("BetterClip")
-        try! FileManager.default.createDirectory(at: appSupport, withIntermediateDirectories: true)
-        return Database(path: appSupport.appendingPathComponent("betterclip.sqlite").path)
+        try? FileManager.default.createDirectory(at: appSupport, withIntermediateDirectories: true)
+        let dbURL = appSupport.appendingPathComponent("betterclip.sqlite")
+        if let db = try? Database(path: dbURL.path) { return db }
+        // Recovery: corrupt or unreadable DB — delete and start fresh (history lost).
+        try? FileManager.default.removeItem(at: dbURL)
+        return try! Database(path: dbURL.path)
     }()
 
     private let queue: DatabaseQueue
 
     // Production init
-    init(path: String) {
-        queue = try! DatabaseQueue(path: path)
-        try! applyMigrations()
+    init(path: String) throws {
+        queue = try DatabaseQueue(path: path)
+        try applyMigrations()
     }
 
     // In-memory init for tests

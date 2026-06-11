@@ -11,7 +11,9 @@ final class BlobStore {
 
     init(directory: URL) {
         self.directory = directory
-        try! FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        // try? — if disk-full or permissions failure, write() silently skips
+        // and read() returns nil; callers already handle nil gracefully.
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
 
     func write(_ data: Data) -> String {
