@@ -14,6 +14,10 @@
   ],
   "author": "Yarin Mag",
   "license": "MIT",
+  "funding": {
+    "type": "individual",
+    "url": "https://ko-fi.com/yarinmag"
+  },
   "bin": {
     "betterclip": "./bin/install.js"
   },

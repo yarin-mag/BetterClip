@@ -1,5 +1,7 @@
 # BetterClip
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/yarinmag)
+
 A native macOS menu-bar clipboard manager with searchable history, saved snippets, and a global hotkey panel.
 
 ## Features
