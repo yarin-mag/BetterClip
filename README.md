@@ -16,18 +16,6 @@ A native macOS menu-bar clipboard manager with searchable history, saved snippet
 
 ## Installation
 
-### Homebrew (Recommended)
-
-```bash
-brew tap yarin-mag/betterclip
-brew install betterclip
-```
-
-To upgrade:
-```bash
-brew upgrade betterclip
-```
-
 ### npm
 
 ```bash
