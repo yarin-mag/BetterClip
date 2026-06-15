@@ -93,7 +93,7 @@ final class PanelController {
 
     private func toggleFloatingPanel(width: CGFloat, height: CGFloat) {
         if let panel, panel.isVisible {
-            panel.orderOut(nil)
+            viewModel.pasteSelected()
             return
         }
 
