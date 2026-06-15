@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Test app
+        run: xcodebuild test -project BetterClip.xcodeproj -scheme BetterClip -destination 'platform=macOS'
+
+      - name: Test npm installer
+        run: npm test --prefix npm

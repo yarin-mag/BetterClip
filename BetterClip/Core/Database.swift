@@ -12,7 +12,9 @@ final class Database {
         if let db = try? Database(path: dbURL.path) { return db }
         // Recovery: corrupt or unreadable DB — delete and start fresh (history lost).
         try? FileManager.default.removeItem(at: dbURL)
-        return try! Database(path: dbURL.path)
+        if let recovered = try? Database(path: dbURL.path) { return recovered }
+        // Last resort: in-memory DB. History is lost for this session but app does not crash.
+        return Database()
     }()
 
     private let queue: DatabaseQueue
@@ -76,9 +78,9 @@ final class Database {
         }
     }
 
-    func searchClips(query: String) throws -> [Clip] {
+    func searchClips(query: String, limit: Int = 50) throws -> [Clip] {
         let q = query.trimmingCharacters(in: .whitespaces)
-        guard !q.isEmpty else { return try fetchRecentClips() }
+        guard !q.isEmpty else { return try fetchRecentClips(limit: limit) }
 
         let lower = q.lowercased()
 

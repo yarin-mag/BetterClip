@@ -10,6 +10,13 @@ final class ClipboardMonitor {
     private var lastChangeCount: Int = NSPasteboard.general.changeCount
     private var timer: Timer?
 
+    // internal so tests can inspect; main-thread only (matches poll() and all callers)
+    var ignoredChangeCounts: Set<Int> = []
+
+    func ignoreChangeCount(_ count: Int) {
+        ignoredChangeCounts.insert(count)
+    }
+
     func start() {
         let t = Timer(timeInterval: 0.3, repeats: true) { [weak self] _ in
             self?.poll()
@@ -26,7 +33,10 @@ final class ClipboardMonitor {
     private func poll() {
         let pasteboard = NSPasteboard.general
         guard pasteboard.changeCount != lastChangeCount else { return }
-        lastChangeCount = pasteboard.changeCount
+        let newCount = pasteboard.changeCount
+        lastChangeCount = newCount
+
+        if ignoredChangeCounts.remove(newCount) != nil { return }
 
         guard let clip = read(pasteboard) else { return }
 
@@ -55,8 +65,8 @@ final class ClipboardMonitor {
 
         let maxBytes = Preferences.shared.maxImageSizeMB * 1_024 * 1_024
         if let data = pasteboard.data(forType: .tiff) ?? pasteboard.data(forType: .png),
-           data.count <= maxBytes {
-            let hash = BlobStore.shared.write(data)
+           data.count <= maxBytes,
+           let hash = try? BlobStore.shared.write(data) {
             return Clip(id: nil, type: .image, textContent: nil, blobHash: hash,
                         appSource: appSource, createdAt: now, lastUsedAt: now)
         }

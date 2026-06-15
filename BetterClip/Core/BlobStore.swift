@@ -16,11 +16,11 @@ final class BlobStore {
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
 
-    func write(_ data: Data) -> String {
+    func write(_ data: Data) throws -> String {
         let hash = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
         let url = directory.appendingPathComponent(hash)
         if !FileManager.default.fileExists(atPath: url.path) {
-            try? data.write(to: url, options: .atomic)
+            try data.write(to: url, options: .atomic)
         }
         return hash
     }

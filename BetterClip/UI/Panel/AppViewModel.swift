@@ -64,7 +64,7 @@ final class AppViewModel: ObservableObject {
     }
 
     func refresh(query: String) {
-        clips    = (try? Database.shared.searchClips(query: query)) ?? []
+        clips    = (try? Database.shared.searchClips(query: query, limit: Preferences.shared.historyLimit)) ?? []
         snippets = (try? SnippetStore.shared.search(query: query)) ?? []
         folders  = (try? SnippetStore.shared.folders()) ?? []
         selectedIndex = 0

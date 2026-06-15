@@ -133,6 +133,52 @@ final class DatabaseTests: XCTestCase {
         try? FileManager.default.removeItem(at: tmp)
     }
 
+    func testDatabaseFallsBackToMemoryWhenPathUnwritable() throws {
+        let readOnlyDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: readOnlyDir, withIntermediateDirectories: true)
+        try FileManager.default.setAttributes([.posixPermissions: NSNumber(value: 0o444)],
+                                               ofItemAtPath: readOnlyDir.path)
+        let unwritablePath = readOnlyDir.appendingPathComponent("test.sqlite").path
+
+        XCTAssertThrowsError(try Database(path: unwritablePath),
+            "Opening a DB in a read-only directory must throw, not crash with try!")
+
+        try FileManager.default.setAttributes([.posixPermissions: NSNumber(value: 0o755)],
+                                               ofItemAtPath: readOnlyDir.path)
+        try FileManager.default.removeItem(at: readOnlyDir)
+    }
+
+    func testSearchClipsEmptyQueryRespectsExplicitLimit() throws {
+        for i in 1...60 {
+            var clip = Clip(id: nil, type: .text, textContent: "item \(i)",
+                            blobHash: nil, appSource: nil,
+                            createdAt: Date().addingTimeInterval(Double(i)),
+                            lastUsedAt: Date())
+            try db.insertClip(&clip)
+        }
+        let defaultResult = try db.searchClips(query: "")
+        XCTAssertEqual(defaultResult.count, 50,
+            "Default limit of 50 must cap results at 50")
+
+        let fullResult = try db.searchClips(query: "", limit: 60)
+        XCTAssertEqual(fullResult.count, 60,
+            "Explicit limit of 60 must return all 60 clips")
+    }
+
+    func testSearchClipsEmptyQueryReturnsMostRecent() throws {
+        for i in 1...60 {
+            var clip = Clip(id: nil, type: .text, textContent: "item \(i)",
+                            blobHash: nil, appSource: nil,
+                            createdAt: Date().addingTimeInterval(Double(i)),
+                            lastUsedAt: Date())
+            try db.insertClip(&clip)
+        }
+        let result = try db.searchClips(query: "", limit: 60)
+        XCTAssertEqual(result.first?.textContent, "item 60",
+            "Results must be ordered newest first")
+    }
+
     func testCleanHistoryCountsBlobsCorrectly() throws {
         // Create clips with blob hashes
         var c1 = Clip(id: nil, type: .image, textContent: nil,

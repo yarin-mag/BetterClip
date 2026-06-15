@@ -18,7 +18,11 @@ enum LayoutMode: String, CaseIterable {
 final class Preferences {
     static let shared = Preferences()
 
-    private let defaults = UserDefaults.standard
+    private let defaults: UserDefaults
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
 
     var layoutMode: LayoutMode {
         get { LayoutMode(rawValue: defaults.string(forKey: "layoutMode") ?? "") ?? .full }
@@ -28,7 +32,7 @@ final class Preferences {
     var historyLimit: Int {
         get {
             let v = defaults.integer(forKey: "historyLimit")
-            return v > 0 ? v : 200
+            return v >= 50 ? v : 200
         }
         set { defaults.set(newValue, forKey: "historyLimit") }
     }

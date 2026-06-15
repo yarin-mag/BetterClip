@@ -1,6 +1,6 @@
 {
   "name": "@betterclip/betterclip",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Smart clipboard manager for macOS with snippets and history search",
   "repository": {
     "type": "git",
@@ -24,6 +24,12 @@
   "bin": {
     "betterclip": "./bin/install.js"
   },
+  "scripts": {
+    "test": "node --test"
+  },
+  "files": [
+    "bin/"
+  ],
   "preferGlobal": true,
   "engines": {
     "node": ">=14.0.0",

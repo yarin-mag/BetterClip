@@ -25,6 +25,7 @@ npm install -g @betterclip/betterclip
 ### Manual
 
 Download the latest `.dmg` from [GitHub Releases](https://github.com/yarin-mag/BetterClip/releases), mount it, and drag `BetterClip.app` to `/Applications`.
+Each release includes a companion `.sha256` file, and the npm installer verifies it before mounting the DMG.
 
 ## Requirements
 
@@ -40,8 +41,8 @@ xcodebuild build -project BetterClip.xcodeproj -scheme BetterClip -destination '
 
 ## Documentation
 
+- **Architecture**: [`ARCHITECTURE.md`](ARCHITECTURE.md) — component reference, data flows, storage layout, design decisions, test coverage
 - Design spec: `docs/superpowers/specs/2026-06-08-betterclip-design.md`
-- Implementation plan: `docs/superpowers/plans/2026-06-08-betterclip-implementation.md`
 
 ## License
 

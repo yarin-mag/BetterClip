@@ -24,6 +24,14 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
+      - name: Verify release versions agree
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          PACKAGE_VERSION=$(node -p "require('./npm/package.json').version")
+          INSTALLER_VERSION=$(node -p "require('./npm/bin/install').VERSION")
+          test "$VERSION" = "$PACKAGE_VERSION"
+          test "$VERSION" = "$INSTALLER_VERSION"
+
       - name: Update Info.plist with version
         run: |
           VERSION="${{ steps.version.outputs.version }}"
@@ -41,6 +49,9 @@ jobs:
 
       - name: Generate Xcode project
         run: xcodegen generate
+
+      - name: Test app
+        run: xcodebuild test -project BetterClip.xcodeproj -scheme BetterClip -destination 'platform=macOS'
 
       - name: Build app
         run: |
@@ -72,10 +83,19 @@ jobs:
           # Verify DMG was created
           ls -lh "$DMG_NAME"
 
+      - name: Generate and verify SHA-256 checksum
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          DMG_NAME="BetterClip-${VERSION}.dmg"
+          shasum -a 256 "$DMG_NAME" > "${DMG_NAME}.sha256"
+          shasum -a 256 -c "${DMG_NAME}.sha256"
+
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: BetterClip-${{ steps.version.outputs.version }}.dmg
+          files: |
+            BetterClip-${{ steps.version.outputs.version }}.dmg
+            BetterClip-${{ steps.version.outputs.version }}.dmg.sha256
           draft: false
           generate_release_notes: true
         env:

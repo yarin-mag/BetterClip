@@ -17,12 +17,14 @@ struct PasteboardWriter {
         default:
             break
         }
+        ClipboardMonitor.shared.ignoreChangeCount(pasteboard.changeCount)
     }
 
     static func write(snippet: Snippet) {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(snippet.content, forType: .string)
+        ClipboardMonitor.shared.ignoreChangeCount(pasteboard.changeCount)
     }
 
     // Requires Accessibility permission (prompted once at startup). Posts to target PID when given.
