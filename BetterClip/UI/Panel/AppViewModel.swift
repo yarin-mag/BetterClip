@@ -156,11 +156,14 @@ final class AppViewModel: ObservableObject {
     }
 
     private func triggerPasteAndClose() {
-        let pid = previousApp?.processIdentifier
+        guard PasteboardWriter.hasAccessibilityPermission() else {
+            PasteboardWriter.requestAccessibilityPermission()
+            return
+        }
         shouldClosePanel.send()
         previousApp?.activate(options: .activateIgnoringOtherApps)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            PasteboardWriter.simulatePaste(toPid: pid)
+            PasteboardWriter.simulatePaste()
         }
     }
 }

@@ -27,20 +27,29 @@ struct PasteboardWriter {
         ClipboardMonitor.shared.ignoreChangeCount(pasteboard.changeCount)
     }
 
-    // Requires Accessibility permission (prompted once at startup). Posts to target PID when given.
-    static func simulatePaste(toPid pid: pid_t? = nil) {
-        guard AXIsProcessTrusted() else { return }
+    static func hasAccessibilityPermission() -> Bool {
+        AXIsProcessTrusted()
+    }
+
+    static func requestAccessibilityPermission() {
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true]
+        AXIsProcessTrustedWithOptions(options)
+    }
+
+    // The destination app is activated before this runs, so post to the active session.
+    @discardableResult
+    static func simulatePaste(
+        isTrusted: () -> Bool = { AXIsProcessTrusted() },
+        post: (CGEvent) -> Void = { $0.post(tap: .cghidEventTap) }
+    ) -> Bool {
+        guard isTrusted() else { return false }
         let src = CGEventSource(stateID: .hidSystemState)
         guard let vDown = CGEvent(keyboardEventSource: src, virtualKey: 0x09, keyDown: true),
-              let vUp   = CGEvent(keyboardEventSource: src, virtualKey: 0x09, keyDown: false) else { return }
+              let vUp   = CGEvent(keyboardEventSource: src, virtualKey: 0x09, keyDown: false) else { return false }
         vDown.flags = .maskCommand
         vUp.flags   = .maskCommand
-        if let pid {
-            vDown.postToPid(pid)
-            vUp.postToPid(pid)
-        } else {
-            vDown.post(tap: .cgAnnotatedSessionEventTap)
-            vUp.post(tap: .cgAnnotatedSessionEventTap)
-        }
+        post(vDown)
+        post(vUp)
+        return true
     }
 }

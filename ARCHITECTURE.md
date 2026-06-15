@@ -56,7 +56,7 @@ Polls `NSPasteboard.general.changeCount` every 300ms on the main `RunLoop` (`.co
 
 Writes a `Clip` or `Snippet` to `NSPasteboard.general`, then records the resulting `changeCount` in `ClipboardMonitor.ignoredChangeCounts`.
 
-For auto-paste, `simulatePaste(toPid:)` sends a CGEvent ⌘V keystroke. Guarded by `AXIsProcessTrusted()` — silently does nothing if Accessibility permission is not granted.
+For auto-paste, `simulatePaste()` sends a CGEvent Cmd+V keystroke to the active session after the originating app is reactivated. The panel stays open and macOS re-prompts if Accessibility permission is unavailable.
 
 ---
 
@@ -187,7 +187,7 @@ AppViewModel.refresh()
 shouldClosePanel.send() → panel closes
 previousApp.activate()
     ↓ (0.15s delay)
-PasteboardWriter.simulatePaste(toPid:) → CGEvent ⌘V
+PasteboardWriter.simulatePaste() → active-session CGEvent Cmd+V
 ```
 
 ### Hotkey activation
