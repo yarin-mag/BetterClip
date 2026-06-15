@@ -22,7 +22,7 @@
     "url": "https://ko-fi.com/yarinmag"
   },
   "bin": {
-    "betterclip": "./bin/install.js"
+    "betterclip": "bin/install.js"
   },
   "scripts": {
     "test": "node --test"
