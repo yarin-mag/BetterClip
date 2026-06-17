@@ -93,6 +93,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             preferencesWindow = window
         }
         preferencesWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     private func requestAccessibilityIfNeeded() {

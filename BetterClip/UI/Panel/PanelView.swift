@@ -128,7 +128,7 @@ struct PanelView: View {
     private var historyList: some View {
         VStack(spacing: 0) {
             ForEach(Array(viewModel.clips.enumerated()), id: \.element.id) { index, clip in
-                ClipRowView(clip: clip, isSelected: index == viewModel.selectedIndex, index: index + 1)
+                ClipRowView(clip: clip, isSelected: index == viewModel.selectedIndex, index: index + 1, onDelete: { viewModel.deleteClip(clip) })
                     .equatable()
                     .id(index)
                     .onTapGesture(count: 2) { viewModel.pasteClip(clip) }

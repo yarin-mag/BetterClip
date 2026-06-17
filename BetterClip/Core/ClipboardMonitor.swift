@@ -17,6 +17,10 @@ final class ClipboardMonitor {
         ignoredChangeCounts.insert(count)
     }
 
+    func syncChangeCount() {
+        lastChangeCount = NSPasteboard.general.changeCount
+    }
+
     func start() {
         let t = Timer(timeInterval: 0.3, repeats: true) { [weak self] _ in
             self?.poll()

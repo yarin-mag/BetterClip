@@ -5,6 +5,7 @@ struct ClipRowView: View, Equatable {
     let clip: Clip
     let isSelected: Bool
     let index: Int
+    let onDelete: () -> Void
     @State private var isHovered = false
 
     static func == (lhs: ClipRowView, rhs: ClipRowView) -> Bool {
@@ -20,6 +21,14 @@ struct ClipRowView: View, Equatable {
             if clip.type == .image, let hash = clip.blobHash {
                 ImageThumbnailView(hash: hash)
             }
+            Button(action: onDelete) {
+                Image(systemName: "minus.circle")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .opacity(isHovered ? 1 : 0)
+            .help("Remove from history")
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 7)

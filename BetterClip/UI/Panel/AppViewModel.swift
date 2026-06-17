@@ -148,6 +148,8 @@ final class AppViewModel: ObservableObject {
 
     func clearHistory() {
         try? Database.shared.deleteAllClips()
+        NSPasteboard.general.clearContents()
+        ClipboardMonitor.shared.syncChangeCount()
         refresh(query: searchQuery)
     }
 

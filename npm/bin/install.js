@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const { execSync } = require('child_process');
 const os = require('os');
 
-const VERSION = '1.0.8';
+const VERSION = '1.0.9';
 const REPO = 'yarin-mag/BetterClip';
 const DMG_URL = `https://github.com/${REPO}/releases/download/v${VERSION}/BetterClip-${VERSION}.dmg`;
 const TEMP_DIR = path.join(os.tmpdir(), 'betterclip-install');

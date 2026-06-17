@@ -65,6 +65,7 @@ final class PanelController {
     private var cancellables = Set<AnyCancellable>()
     private var panelCancellables = Set<AnyCancellable>()
     private var panelResignObserver: NSObjectProtocol?
+    private var escapeMonitor: Any?
     var capturedPreviousApp: NSRunningApplication?
     private weak var hostingView: KeyAcceptingHostingView?
 
@@ -96,7 +97,11 @@ final class PanelController {
             viewModel.pasteSelected()
             return
         }
+        // Ensure any ghost panel is gone before creating a new one
+        hideFloatingPanel()
+        panel = nil
 
+        viewModel.searchQuery = ""
         viewModel.previousApp = capturedPreviousApp
 
         let p = makePanel(width: width, height: height)
@@ -115,9 +120,19 @@ final class PanelController {
         p.contentView = effect
 
         panelCancellables.removeAll()
+        removeEscapeMonitor()
         viewModel.shouldClosePanel
-            .sink { [weak p] in p?.orderOut(nil) }
+            .sink { [weak self] in
+                self?.hideFloatingPanel()
+            }
             .store(in: &panelCancellables)
+        escapeMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            if event.keyCode == 53 {
+                self?.viewModel.shouldClosePanel.send()
+                return nil
+            }
+            return event
+        }
 
         p.center()
         p.makeFirstResponder(hostingView)
@@ -154,7 +169,7 @@ final class PanelController {
         panelResignObserver.flatMap { NotificationCenter.default.removeObserver($0) }
         panelResignObserver = NotificationCenter.default.addObserver(
             forName: NSWindow.didResignKeyNotification, object: p, queue: .main
-        ) { [weak p] _ in p?.orderOut(nil) }
+        ) { [weak self] _ in self?.hideFloatingPanel() }
 
         return p
     }
@@ -164,7 +179,19 @@ final class PanelController {
     }
 
     func close() {
-        panel?.orderOut(nil)
+        hideFloatingPanel()
         popover?.close()
+    }
+
+    private func hideFloatingPanel() {
+        removeEscapeMonitor()
+        panel?.orderOut(nil)
+    }
+
+    private func removeEscapeMonitor() {
+        if let m = escapeMonitor {
+            NSEvent.removeMonitor(m)
+            escapeMonitor = nil
+        }
     }
 }
