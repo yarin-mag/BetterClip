@@ -6,6 +6,8 @@ struct PanelView: View {
     @ObservedObject var viewModel: AppViewModel
     @FocusState private var searchFocused: Bool
     @State private var showClearHistoryConfirm = false
+    @State private var clearHistoryResult: (clipsDeleted: Int, blobsCleaned: Int)?
+    @State private var showClearHistorySuccess = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -59,10 +61,22 @@ struct PanelView: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .alert("Clear Clipboard History?", isPresented: $showClearHistoryConfirm) {
-            Button("Clear", role: .destructive) { viewModel.clearHistory() }
+            Button("Clear", role: .destructive) {
+                if let result = viewModel.clearHistory() {
+                    clearHistoryResult = result
+                    showClearHistorySuccess = true
+                }
+            }
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Permanently deletes all clipboard history. Snippets are not affected.")
+        }
+        .alert("History Cleared", isPresented: $showClearHistorySuccess) {
+            Button("OK") { showClearHistorySuccess = false }
+        } message: {
+            if let result = clearHistoryResult {
+                Text("Cleared \(result.clipsDeleted) clips. Snippets kept safe.")
+            }
         }
     }
 

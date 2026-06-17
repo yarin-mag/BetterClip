@@ -146,11 +146,13 @@ final class AppViewModel: ObservableObject {
         }
     }
 
-    func clearHistory() {
-        try? Database.shared.deleteAllClips()
+    @discardableResult
+    func clearHistory() -> (clipsDeleted: Int, blobsCleaned: Int)? {
+        let result = try? Database.shared.deleteAllClips()
         NSPasteboard.general.clearContents()
         ClipboardMonitor.shared.syncChangeCount()
         refresh(query: searchQuery)
+        return result
     }
 
     func showSaveAsSnippet(clip: Clip) {
