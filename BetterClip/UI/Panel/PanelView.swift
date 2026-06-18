@@ -179,7 +179,7 @@ private struct ClearHistoryOverlay: View {
     var body: some View {
         ZStack {
             Color.black.opacity(0.4)
-                .ignoreSafeArea()
+                .ignoresSafeArea()
                 .onTapGesture { isPresented = false }
 
             VStack(spacing: 16) {
