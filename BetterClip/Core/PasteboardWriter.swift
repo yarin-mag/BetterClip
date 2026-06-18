@@ -11,8 +11,9 @@ struct PasteboardWriter {
                 pasteboard.setString(text, forType: .string)
             }
         case .image:
-            if let hash = clip.blobHash, let data = BlobStore.shared.read(hash: hash) {
-                pasteboard.setData(data, forType: .tiff)
+            if let hash = clip.blobHash, let data = BlobStore.shared.read(hash: hash),
+                let image = NSImage(data: data) {
+                pasteboard.writeObjects([image])
             }
         default:
             break
