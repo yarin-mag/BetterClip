@@ -41,11 +41,12 @@ final class DatabaseTests: XCTestCase {
     }
 
     func testTrimKeepsLatest() throws {
+        let baseDate = Date()
         for i in 1...5 {
             var clip = Clip(id: nil, type: .text, textContent: "item \(i)",
                             blobHash: nil, appSource: nil,
-                            createdAt: Date().addingTimeInterval(Double(i)),
-                            lastUsedAt: Date())
+                            createdAt: baseDate.addingTimeInterval(Double(i)),
+                            lastUsedAt: baseDate.addingTimeInterval(Double(i)))
             try db.insertClip(&clip)
         }
         try db.trimClips(keepingLatest: 3)
@@ -167,16 +168,17 @@ final class DatabaseTests: XCTestCase {
     }
 
     func testSearchClipsEmptyQueryReturnsMostRecent() throws {
+        let baseDate = Date()
         for i in 1...60 {
             var clip = Clip(id: nil, type: .text, textContent: "item \(i)",
                             blobHash: nil, appSource: nil,
-                            createdAt: Date().addingTimeInterval(Double(i)),
-                            lastUsedAt: Date())
+                            createdAt: baseDate.addingTimeInterval(Double(i)),
+                            lastUsedAt: baseDate.addingTimeInterval(Double(i)))
             try db.insertClip(&clip)
         }
         let result = try db.searchClips(query: "", limit: 60)
         XCTAssertEqual(result.first?.textContent, "item 60",
-            "Results must be ordered newest first")
+            "Results must be ordered by most recently used first")
     }
 
     func testCleanHistoryCountsBlobsCorrectly() throws {
