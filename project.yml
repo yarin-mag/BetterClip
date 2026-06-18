@@ -15,6 +15,7 @@ targets:
       MACOSX_DEPLOYMENT_TARGET: "14.0"
       INFOPLIST_FILE: BetterClip/Resources/Info.plist
       CODE_SIGN_ENTITLEMENTS: BetterClip/Resources/BetterClip.entitlements
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
       SWIFT_VERSION: "5.9"
       CODE_SIGN_IDENTITY: "-"
       CODE_SIGNING_REQUIRED: "NO"
