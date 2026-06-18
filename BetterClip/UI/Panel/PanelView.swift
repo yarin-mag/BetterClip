@@ -6,8 +6,6 @@ struct PanelView: View {
     @ObservedObject var viewModel: AppViewModel
     @FocusState private var searchFocused: Bool
     @State private var showClearHistoryConfirm = false
-    @State private var clearHistoryResult: (clipsDeleted: Int, blobsCleaned: Int)?
-    @State private var showClearHistorySuccess = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -23,6 +21,13 @@ struct PanelView: View {
             if Preferences.shared.layoutMode == .full {
                 Divider()
                 PreviewPane(viewModel: viewModel)
+            }
+        }
+        .overlay {
+            if showClearHistoryConfirm {
+                ClearHistoryOverlay(isPresented: $showClearHistoryConfirm) {
+                    viewModel.clearHistory()
+                }
             }
         }
         .onAppear { }
@@ -60,24 +65,6 @@ struct PanelView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .alert("Clear Clipboard History?", isPresented: $showClearHistoryConfirm) {
-            Button("Clear", role: .destructive) {
-                if let result = viewModel.clearHistory() {
-                    clearHistoryResult = result
-                    showClearHistorySuccess = true
-                }
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Permanently deletes all clipboard history. Snippets are not affected.")
-        }
-        .alert("History Cleared", isPresented: $showClearHistorySuccess) {
-            Button("OK") { showClearHistorySuccess = false }
-        } message: {
-            if let result = clearHistoryResult {
-                Text("Cleared \(result.clipsDeleted) clips. Snippets kept safe.")
-            }
-        }
     }
 
     @ViewBuilder
@@ -181,6 +168,60 @@ struct PanelView: View {
                 .id(index)
                 .onTapGesture(count: 2) { viewModel.pasteSnippet(snippet) }
                 .onTapGesture { viewModel.selectedIndex = index }
+        }
+    }
+}
+
+private struct ClearHistoryOverlay: View {
+    @Binding var isPresented: Bool
+    let onConfirm: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.4)
+                .ignoreSafeArea()
+                .onTapGesture { isPresented = false }
+
+            VStack(spacing: 16) {
+                Image(systemName: "trash.fill")
+                    .font(.system(size: 26))
+                    .foregroundStyle(.red)
+
+                Text("Clear Clipboard history?")
+                    .font(.system(size: 14, weight: .semibold))
+
+                Text("Permanently deletes all clipboard history.\n Snippets are not affected.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+
+                HStack(spacing: 10) {
+                    Button("Cancel") { isPresented = false }
+                        .buttonStyle(.plain)
+                        .font(.system(size: 13))
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 7)
+                        .background(Color.primary.opacity(0.08))
+                        .cornerRadius(7)
+
+                    Button("Clear All") {
+                        onConfirm()
+                        isPresented = false
+                    }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 7)
+                    .background(Color.red)
+                    .cornerRadius(7)
+                }
+            }
+            .padding(24)
+            .background(.regularMaterial)
+            .cornerRadius(14)
+            .shadow(color: .black.opacity(0.25), radius: 24, y: 0)
+            .padding(40)
         }
     }
 }

@@ -74,7 +74,7 @@ final class Database {
 
     func fetchRecentClips(limit: Int = 50) throws -> [Clip] {
         try queue.read { db in
-            try Clip.order(Column("createdAt").desc).limit(limit).fetchAll(db)
+            try Clip.order(Column("lastUsedAt").desc).limit(limit).fetchAll(db)
         }
     }
 
@@ -97,7 +97,7 @@ final class Database {
         if let type = typeFilter {
             return try queue.read { db in
                 try Clip.filter(Column("type") == type)
-                    .order(Column("createdAt").desc)
+                    .order(Column("lastUsedAt").desc)
                     .fetchAll(db)
             }
         }
@@ -117,7 +117,7 @@ final class Database {
                    WHERE clips.id IN (
                        SELECT rowid FROM clips_fts WHERE clips_fts MATCH ?
                    )
-                   ORDER BY clips.createdAt DESC
+                   ORDER BY clips.lastUsedAt DESC
                    """, arguments: [ftsQuery]),
                !results.isEmpty {
                 return results
@@ -127,7 +127,7 @@ final class Database {
             return try Clip.fetchAll(db, sql: """
                 SELECT * FROM clips
                 WHERE LOWER(IFNULL(textContent, '')) LIKE ?
-                ORDER BY createdAt DESC
+                ORDER BY lastUsedAt DESC
                 """, arguments: [pattern])
         }
     }
