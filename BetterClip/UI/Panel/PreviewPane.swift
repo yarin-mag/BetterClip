@@ -36,15 +36,52 @@ struct PreviewPane: View {
     @ViewBuilder
     private var snippetPreview: some View {
         let idx = viewModel.selectedIndex
-        if idx >= 0, idx < viewModel.snippets.count {
-            let snippet = viewModel.snippets[idx]
-            VStack(alignment: .leading, spacing: 8) {
-                Text(snippet.name).font(.headline)
-                Divider()
-                DebouncedTextView(text: snippet.content)
+        let items = viewModel.snippetPanelItems
+        if idx >= 0, idx < items.count {
+            switch items[idx] {
+            case .folder(let folder, _):
+                folderPreview(folder: folder)
+            case .snippet(let snippet, _):
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(snippet.name).font(.headline)
+                    Divider()
+                    DebouncedTextView(text: snippet.content)
+                }
             }
         } else {
             placeholder("Select a snippet")
+        }
+    }
+
+    @ViewBuilder
+    private func folderPreview(folder: SnippetFolder) -> some View {
+        let folderSnippets = viewModel.snippets.filter { $0.folderId == folder.id }
+        VStack(alignment: .leading, spacing: 0) {
+            Text(folder.name)
+                .font(.headline)
+                .padding(.bottom, 8)
+            Divider()
+            if folderSnippets.isEmpty {
+                placeholder("No snippets in this folder")
+                    .padding(.top, 16)
+            } else {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(folderSnippets, id: \.id) { snippet in
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(snippet.name)
+                                    .font(.system(size: 12, weight: .medium))
+                                Text(snippet.content.prefix(80).replacingOccurrences(of: "\n", with: " "))
+                                    .font(.system(size: 11, design: .monospaced))
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            }
+                            .padding(.vertical, 6)
+                            Divider()
+                        }
+                    }
+                }
+            }
         }
     }
 
