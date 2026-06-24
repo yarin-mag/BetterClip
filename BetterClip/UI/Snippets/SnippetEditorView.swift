@@ -12,6 +12,9 @@ struct SnippetEditorView: View {
     @State private var name: String = ""
     @State private var content: String = ""
     @State private var error: String? = nil
+    @FocusState private var focusedField: Field?
+
+    private enum Field { case name, content }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -22,6 +25,7 @@ struct SnippetEditorView: View {
                 Text("Name").font(.subheadline).foregroundStyle(.secondary)
                 TextField("e.g. Email signature", text: $name)
                     .textFieldStyle(.roundedBorder)
+                    .focused($focusedField, equals: .name)
             }
 
             VStack(alignment: .leading, spacing: 6) {
@@ -49,6 +53,9 @@ struct SnippetEditorView: View {
         .onAppear {
             name = existingSnippet?.name ?? ""
             content = existingSnippet?.content ?? prefillContent
+            DispatchQueue.main.async {
+                focusedField = .name
+            }
         }
     }
 

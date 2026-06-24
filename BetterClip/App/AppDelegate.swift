@@ -63,6 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func openSnippetManager() {
         if snippetsWindow?.isVisible ?? false {
             snippetsWindow?.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
             return
         }
         let window = NSWindow(
@@ -75,6 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.contentView = NSHostingView(rootView: SnippetManagerView())
         window.center()
         window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
         snippetsWindow = window
     }
 
