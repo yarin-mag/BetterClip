@@ -102,7 +102,11 @@ final class PanelController {
         panel = nil
 
         viewModel.searchQuery = ""
-        viewModel.previousApp = capturedPreviousApp
+        // Hotkey path sets capturedPreviousApp before activation; status-bar path
+        // doesn't, so fall back to frontmostApplication (captured before NSApp.activate).
+        let prev = capturedPreviousApp ?? NSWorkspace.shared.frontmostApplication
+        viewModel.previousApp = prev?.bundleIdentifier != Bundle.main.bundleIdentifier ? prev : nil
+        capturedPreviousApp = nil
 
         let p = makePanel(width: width, height: height)
         let hostingView = KeyAcceptingHostingView(rootView: PanelView(viewModel: viewModel))

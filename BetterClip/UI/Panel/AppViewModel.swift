@@ -166,7 +166,7 @@ final class AppViewModel: ObservableObject {
         }
         shouldClosePanel.send()
         previousApp?.activate(options: .activateIgnoringOtherApps)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             PasteboardWriter.simulatePaste()
         }
     }
