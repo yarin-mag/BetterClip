@@ -1,14 +1,33 @@
 // BetterClip/UI/Snippets/FolderTreeView.swift
 import SwiftUI
 
+private enum SnippetEditorMode: Identifiable {
+    case add(folderId: Int64?)
+    case edit(Snippet)
+
+    var id: String {
+        switch self {
+        case .add(let folderId): return "add-\(String(describing: folderId))"
+        case .edit(let snippet): return "edit-\(snippet.id ?? -1)"
+        }
+    }
+}
+
+// List(selection:) only matches rows whose tag type equals the selection's wrapped
+// type, so "All Snippets" can't be a nil Int64? tag; use an explicit case instead.
+private enum SidebarItem: Hashable {
+    case all
+    case folder(Int64)
+}
+
 struct SnippetManagerView: View {
     @State private var folders: [SnippetFolder] = []
     @State private var snippets: [Snippet] = []
-    @State private var selectedFolderId: Int64? = nil
-    @State private var showingEditor = false
-    @State private var editingSnippet: Snippet? = nil
+    @State private var sidebarSelection: SidebarItem? = .all
+    @State private var editorMode: SnippetEditorMode? = nil
     @State private var editingFolderId: Int64? = nil
     @State private var editingFolderName: String = ""
+    @FocusState private var renameFieldFocused: Bool
 
     var body: some View {
         HSplitView {
@@ -19,13 +38,18 @@ struct SnippetManagerView: View {
         .frame(minWidth: 560, minHeight: 400)
         .toolbar {
             ToolbarItem {
-                Button { showingEditor = true } label: {
+                Button { editorMode = .add(folderId: selectedFolderId) } label: {
                     Image(systemName: "plus")
                 }
             }
         }
-        .sheet(isPresented: $showingEditor) {
-            SnippetEditorView(folderId: selectedFolderId) { refreshSnippets() }
+        .sheet(item: $editorMode) { mode in
+            switch mode {
+            case .add(let folderId):
+                SnippetEditorView(folderId: folderId) { refreshSnippets() }
+            case .edit(let snippet):
+                SnippetEditorView(existingSnippet: snippet) { refreshSnippets() }
+            }
         }
         .onAppear {
             cancelEditing()
@@ -34,12 +58,15 @@ struct SnippetManagerView: View {
         .onDisappear {
             cancelEditing()
         }
+        .onReceive(NotificationCenter.default.publisher(for: SnippetStore.didChangeNotification)) { _ in
+            refresh()
+        }
     }
 
     private var folderSidebar: some View {
-        List(selection: $selectedFolderId) {
+        List(selection: $sidebarSelection) {
             Label("All Snippets", systemImage: "tray.full")
-                .tag(Optional<Int64>.none)
+                .tag(SidebarItem.all)
             ForEach(folders) { folder in
                 if editingFolderId == folder.id {
                     HStack {
@@ -48,41 +75,59 @@ struct SnippetManagerView: View {
                             saveRenamedFolder()
                         })
                         .textFieldStyle(.roundedBorder)
+                        .focused($renameFieldFocused)
                         Button("Save") { saveRenamedFolder() }
                             .buttonStyle(.plain)
                         Button("Cancel") { editingFolderId = nil }
                             .buttonStyle(.plain)
                     }
-                    .tag(Optional(folder.id!))
+                    .tag(SidebarItem.folder(folder.id!))
                 } else {
+                    // No tap gestures here: on macOS they swallow the click that
+                    // selects the row.
                     Label(folder.name, systemImage: "folder")
-                        .tag(Optional(folder.id!))
-                        .onTapGesture(count: 2) {
-                            editingFolderId = folder.id
-                            editingFolderName = folder.name
-                        }
+                        .tag(SidebarItem.folder(folder.id!))
                         .contextMenu {
-                            Button("Rename") {
-                                editingFolderId = folder.id
-                                editingFolderName = folder.name
-                            }
+                            Button("Rename") { startRenaming(folder) }
                             Button("Delete Folder", role: .destructive) {
-                                try? SnippetStore.shared.deleteFolder(id: folder.id!)
-                                refresh()
+                                deleteFolder(folder)
                             }
                         }
                 }
             }
             Button {
-                let name = "New Folder"
-                _ = try? SnippetStore.shared.createFolder(name: name)
+                guard let folder = try? SnippetStore.shared.createFolder(name: "New Folder") else { return }
                 refresh()
+                sidebarSelection = .folder(folder.id!)
+                startRenaming(folder)
             } label: {
                 Label("Add Folder", systemImage: "folder.badge.plus")
             }
             .buttonStyle(.plain)
         }
-        .onChange(of: selectedFolderId) { _ in refreshSnippets() }
+        .onChange(of: sidebarSelection) { _ in
+            Preferences.shared.lastSnippetFolderId = selectedFolderId
+            refreshSnippets()
+        }
+    }
+
+    private var selectedFolderId: Int64? {
+        if case .folder(let id) = sidebarSelection { return id }
+        return nil
+    }
+
+    private func startRenaming(_ folder: SnippetFolder) {
+        editingFolderId = folder.id
+        editingFolderName = folder.name
+        DispatchQueue.main.async { renameFieldFocused = true }
+    }
+
+    private func deleteFolder(_ folder: SnippetFolder) {
+        guard let id = folder.id else { return }
+        try? SnippetStore.shared.deleteFolder(id: id)
+        if selectedFolderId == id { sidebarSelection = .all }
+        if editingFolderId == id { editingFolderId = nil }
+        refresh()
     }
 
     private func saveRenamedFolder() {
@@ -113,7 +158,7 @@ struct SnippetManagerView: View {
                         .lineLimit(2)
                 }
                 .contextMenu {
-                    Button("Edit") { editingSnippet = snippet; showingEditor = true }
+                    Button("Edit") { editorMode = .edit(snippet) }
                     Button("Delete", role: .destructive) {
                         guard let id = snippet.id else { return }
                         try? SnippetStore.shared.delete(id: id)
@@ -121,9 +166,6 @@ struct SnippetManagerView: View {
                     }
                 }
             }
-        }
-        .sheet(item: $editingSnippet) { snippet in
-            SnippetEditorView(existingSnippet: snippet) { refreshSnippets() }
         }
     }
 
@@ -134,8 +176,7 @@ struct SnippetManagerView: View {
 
     private func cancelEditing() {
         editingFolderId = nil
-        editingSnippet = nil
-        showingEditor = false
+        editorMode = nil
         editingFolderName = ""
     }
 

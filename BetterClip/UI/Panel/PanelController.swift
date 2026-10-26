@@ -82,6 +82,17 @@ final class PanelController {
             pop.close()
             return
         }
+        viewModel.refresh(query: viewModel.searchQuery)
+        // Clicking the status item doesn't activate BetterClip, so the frontmost app is
+        // still the one to paste back into.
+        let prev = capturedPreviousApp ?? NSWorkspace.shared.frontmostApplication
+        viewModel.previousApp = prev?.bundleIdentifier != Bundle.main.bundleIdentifier ? prev : nil
+        capturedPreviousApp = nil
+        if cancellables.isEmpty {
+            viewModel.shouldClosePanel
+                .sink { [weak self] in self?.popover?.close() }
+                .store(in: &cancellables)
+        }
         let pop = NSPopover()
         pop.contentSize = NSSize(width: 320, height: 480)
         pop.behavior = .transient

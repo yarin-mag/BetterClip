@@ -32,7 +32,9 @@ struct PanelView: View {
         }
         .onAppear { }
         .sheet(item: $viewModel.clipToSaveAsSnippet) { clip in
-            SnippetEditorView(prefillContent: clip.textContent ?? "") {
+            let lastFolderId = Preferences.shared.lastSnippetFolderId
+            let defaultFolderId = viewModel.folders.contains { $0.id == lastFolderId } ? lastFolderId : nil
+            SnippetEditorView(prefillContent: clip.textContent ?? "", folderId: defaultFolderId) {
                 viewModel.refresh(query: viewModel.searchQuery)
             }
         }

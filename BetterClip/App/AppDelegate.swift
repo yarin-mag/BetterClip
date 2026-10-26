@@ -98,6 +98,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             defer: false
         )
         window.title = "Snippets"
+        window.isReleasedWhenClosed = false
         window.contentView = NSHostingView(rootView: SnippetManagerView())
         window.center()
         window.makeKeyAndOrderFront(nil)

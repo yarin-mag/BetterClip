@@ -93,6 +93,97 @@ final class DatabaseTests: XCTestCase {
         XCTAssertEqual(afterDelete.count, 0)
     }
 
+    func testAddingSnippetToFolderWithExistingSnippetsKeepsBoth() throws {
+        var folder = SnippetFolder(id: nil, name: "Work", parentId: nil, sortOrder: 0)
+        try db.insertFolder(&folder)
+
+        var first = Snippet(id: nil, folderId: folder.id, name: "First",
+                            content: "First content", shortcut: nil,
+                            createdAt: Date(), sortOrder: 0)
+        try db.insertSnippet(&first)
+
+        var second = Snippet(id: nil, folderId: folder.id, name: "Second",
+                             content: "Second content", shortcut: nil,
+                             createdAt: Date(), sortOrder: 0)
+        try db.insertSnippet(&second)
+
+        let fetched = try db.fetchSnippets(folderId: folder.id)
+        XCTAssertEqual(fetched.count, 2)
+        XCTAssertTrue(fetched.contains { $0.content == "First content" })
+        XCTAssertTrue(fetched.contains { $0.content == "Second content" })
+    }
+
+    func testSwitchingBetweenFoldersReturnsCorrectSnippetsEachTime() throws {
+        var folderA = SnippetFolder(id: nil, name: "A", parentId: nil, sortOrder: 0)
+        try db.insertFolder(&folderA)
+        var folderB = SnippetFolder(id: nil, name: "B", parentId: nil, sortOrder: 0)
+        try db.insertFolder(&folderB)
+
+        var a1 = Snippet(id: nil, folderId: folderA.id, name: "A1",
+                         content: "A1", shortcut: nil, createdAt: Date(), sortOrder: 0)
+        try db.insertSnippet(&a1)
+        var a2 = Snippet(id: nil, folderId: folderA.id, name: "A2",
+                         content: "A2", shortcut: nil, createdAt: Date(), sortOrder: 0)
+        try db.insertSnippet(&a2)
+        var b1 = Snippet(id: nil, folderId: folderB.id, name: "B1",
+                         content: "B1", shortcut: nil, createdAt: Date(), sortOrder: 0)
+        try db.insertSnippet(&b1)
+
+        XCTAssertEqual(try db.fetchSnippets(folderId: folderA.id).count, 2)
+        XCTAssertEqual(try db.fetchSnippets(folderId: folderB.id).count, 1)
+        // Switch back to folder A - must still show both original snippets.
+        let backToA = try db.fetchSnippets(folderId: folderA.id)
+        XCTAssertEqual(backToA.count, 2)
+        XCTAssertTrue(backToA.contains { $0.content == "A1" })
+        XCTAssertTrue(backToA.contains { $0.content == "A2" })
+    }
+
+    func testUpdatingSnippetDoesNotAffectOthersInSameFolder() throws {
+        var folder = SnippetFolder(id: nil, name: "Work", parentId: nil, sortOrder: 0)
+        try db.insertFolder(&folder)
+
+        var first = Snippet(id: nil, folderId: folder.id, name: "First",
+                            content: "Original", shortcut: nil,
+                            createdAt: Date(), sortOrder: 0)
+        try db.insertSnippet(&first)
+        var second = Snippet(id: nil, folderId: folder.id, name: "Second",
+                             content: "Untouched", shortcut: nil,
+                             createdAt: Date(), sortOrder: 0)
+        try db.insertSnippet(&second)
+
+        first.name = "First edited"
+        first.content = "Edited content"
+        try db.updateSnippet(first)
+
+        let fetched = try db.fetchSnippets(folderId: folder.id)
+        XCTAssertEqual(fetched.count, 2)
+        XCTAssertTrue(fetched.contains { $0.content == "Edited content" })
+        XCTAssertTrue(fetched.contains { $0.content == "Untouched" })
+    }
+
+    func testUpdatingSnippetFolderIdMovesItBetweenFolders() throws {
+        var folderA = SnippetFolder(id: nil, name: "A", parentId: nil, sortOrder: 0)
+        try db.insertFolder(&folderA)
+        var folderB = SnippetFolder(id: nil, name: "B", parentId: nil, sortOrder: 0)
+        try db.insertFolder(&folderB)
+
+        var snippet = Snippet(id: nil, folderId: nil, name: "Unfiled",
+                              content: "content", shortcut: nil,
+                              createdAt: Date(), sortOrder: 0)
+        try db.insertSnippet(&snippet)
+        XCTAssertEqual(try db.fetchSnippets(folderId: folderA.id).count, 0)
+
+        snippet.folderId = folderA.id
+        try db.updateSnippet(snippet)
+        XCTAssertEqual(try db.fetchSnippets(folderId: folderA.id).count, 1)
+        XCTAssertEqual(try db.fetchSnippets(folderId: folderB.id).count, 0)
+
+        snippet.folderId = folderB.id
+        try db.updateSnippet(snippet)
+        XCTAssertEqual(try db.fetchSnippets(folderId: folderA.id).count, 0)
+        XCTAssertEqual(try db.fetchSnippets(folderId: folderB.id).count, 1)
+    }
+
     func testDeleteAllClipsPreservesSnippets() throws {
         // Create a folder and snippet
         var folder = SnippetFolder(id: nil, name: "Saved", parentId: nil, sortOrder: 0)

@@ -26,4 +26,14 @@ final class PasteboardWriterTests: XCTestCase {
         XCTAssertTrue(didPaste)
         XCTAssertEqual(postedEvents.count, 2)
     }
+
+    func testWriteSnippetCopiesContentToPasteboard() {
+        let snippet = Snippet(id: 1, folderId: nil, name: "Sig",
+                              content: "Best, Yarin", shortcut: nil,
+                              createdAt: Date(), sortOrder: 0)
+
+        PasteboardWriter.write(snippet: snippet)
+
+        XCTAssertEqual(NSPasteboard.general.string(forType: .string), "Best, Yarin")
+    }
 }

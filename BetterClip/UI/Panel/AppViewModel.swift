@@ -5,9 +5,16 @@ import AppKit
 
 enum PanelTab { case history, snippets }
 
-enum SnippetPanelItem {
+enum SnippetPanelItem: Identifiable {
     case folder(SnippetFolder, isExpanded: Bool)
     case snippet(Snippet, depth: Int)
+
+    var id: String {
+        switch self {
+        case .folder(let folder, _): return "folder-\(folder.id ?? -1)"
+        case .snippet(let snippet, _): return "snippet-\(snippet.id ?? -1)"
+        }
+    }
 }
 
 final class AppViewModel: ObservableObject {
@@ -23,6 +30,7 @@ final class AppViewModel: ObservableObject {
     let shouldClosePanel = PassthroughSubject<Void, Never>()
     var previousApp: NSRunningApplication?
     private var cancellables = Set<AnyCancellable>()
+    private var lastRefreshedQuery: String?
 
     var snippetPanelItems: [SnippetPanelItem] {
         if !searchQuery.isEmpty {
@@ -61,12 +69,25 @@ final class AppViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in self?.refresh(query: self?.searchQuery ?? "") }
             .store(in: &cancellables)
+
+        // Keep the panel in sync with edits made in the Snippet Manager window, and
+        // reveal the folder a snippet was just saved into.
+        NotificationCenter.default.publisher(for: SnippetStore.didChangeNotification)
+            .sink { [weak self] note in
+                guard let self else { return }
+                if let folderId = note.userInfo?[SnippetStore.folderIdKey] as? Int64 {
+                    self.expandedFolderIds.insert(folderId)
+                }
+                self.refresh(query: self.searchQuery)
+            }
+            .store(in: &cancellables)
     }
 
     func refresh(query: String) {
         clips    = (try? Database.shared.searchClips(query: query, limit: Preferences.shared.historyLimit)) ?? []
         snippets = (try? SnippetStore.shared.search(query: query)) ?? []
         folders  = (try? SnippetStore.shared.folders()) ?? []
+        lastRefreshedQuery = query
         selectedIndex = 0
     }
 
@@ -74,15 +95,22 @@ final class AppViewModel: ObservableObject {
         PasteboardWriter.write(clip: clip)
         if let id = clip.id { try? Database.shared.updateClipLastUsed(id: id) }
         refresh(query: searchQuery)
-        if Preferences.shared.autoPasteAndClose {
-            triggerPasteAndClose()
-        }
+        finishClickPaste()
     }
 
     func pasteSnippet(_ snippet: Snippet) {
         PasteboardWriter.write(snippet: snippet)
+        finishClickPaste()
+    }
+
+    // Auto-paste off means "copy only", but still hand focus back to the previous app
+    // so the user's ⌘V lands there instead of in the panel.
+    private func finishClickPaste() {
         if Preferences.shared.autoPasteAndClose {
             triggerPasteAndClose()
+        } else {
+            shouldClosePanel.send()
+            previousApp?.activate(options: .activateIgnoringOtherApps)
         }
     }
 
@@ -125,6 +153,8 @@ final class AppViewModel: ObservableObject {
     }
 
     func pasteSelected() {
+        // Enter pressed before the search debounce fired: paste from the current results.
+        if lastRefreshedQuery != searchQuery { refresh(query: searchQuery) }
         switch selectedTab {
         case .history:
             guard selectedIndex >= 0, selectedIndex < clips.count else { return }

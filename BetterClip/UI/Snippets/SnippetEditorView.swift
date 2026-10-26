@@ -11,6 +11,8 @@ struct SnippetEditorView: View {
 
     @State private var name: String = ""
     @State private var content: String = ""
+    @State private var selectedFolderId: Int64? = nil
+    @State private var folders: [SnippetFolder] = []
     @State private var error: String? = nil
     @FocusState private var focusedField: Field?
 
@@ -36,6 +38,17 @@ struct SnippetEditorView: View {
                     .border(Color.secondary.opacity(0.3))
             }
 
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Folder").font(.subheadline).foregroundStyle(.secondary)
+                Picker("", selection: $selectedFolderId) {
+                    Text("No Folder").tag(Optional<Int64>.none)
+                    ForEach(folders) { folder in
+                        Text(folder.name).tag(folder.id)
+                    }
+                }
+                .labelsHidden()
+            }
+
             if let error {
                 Text(error).foregroundStyle(.red).font(.caption)
             }
@@ -53,6 +66,10 @@ struct SnippetEditorView: View {
         .onAppear {
             name = existingSnippet?.name ?? ""
             content = existingSnippet?.content ?? prefillContent
+            folders = (try? SnippetStore.shared.folders()) ?? []
+            let initialFolderId = existingSnippet?.folderId ?? folderId
+            // A deleted folder has no Picker row; show "No Folder" rather than a blank picker.
+            selectedFolderId = folders.contains { $0.id == initialFolderId } ? initialFolderId : nil
             DispatchQueue.main.async {
                 focusedField = .name
             }
@@ -66,10 +83,11 @@ struct SnippetEditorView: View {
             if var existing = existingSnippet {
                 existing.name = trimmedName
                 existing.content = content
+                existing.folderId = selectedFolderId
                 try SnippetStore.shared.update(existing)
             } else {
                 _ = try SnippetStore.shared.createSnippet(
-                    name: trimmedName, content: content, folderId: folderId)
+                    name: trimmedName, content: content, folderId: selectedFolderId)
             }
             onSave?()
             dismiss()

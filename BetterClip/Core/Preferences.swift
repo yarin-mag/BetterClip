@@ -57,4 +57,20 @@ final class Preferences {
         }
         set { defaults.set(newValue, forKey: "autoPasteAndClose") }
     }
+
+    /// Last folder the user browsed in the Snippet Manager. Used as the default
+    /// destination for snippets saved from elsewhere (e.g. clipboard history).
+    var lastSnippetFolderId: Int64? {
+        get {
+            guard defaults.object(forKey: "lastSnippetFolderId") != nil else { return nil }
+            return Int64(defaults.integer(forKey: "lastSnippetFolderId"))
+        }
+        set {
+            if let newValue {
+                defaults.set(newValue, forKey: "lastSnippetFolderId")
+            } else {
+                defaults.removeObject(forKey: "lastSnippetFolderId")
+            }
+        }
+    }
 }

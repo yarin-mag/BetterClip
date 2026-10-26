@@ -10,6 +10,8 @@ struct SnippetRowView: View, Equatable {
 
     static func == (lhs: SnippetRowView, rhs: SnippetRowView) -> Bool {
         lhs.isSelected == rhs.isSelected && lhs.snippet.id == rhs.snippet.id &&
+        lhs.snippet.name == rhs.snippet.name && lhs.snippet.content == rhs.snippet.content &&
+        lhs.snippet.shortcut == rhs.snippet.shortcut &&
         lhs.index == rhs.index && lhs.depth == rhs.depth
     }
 

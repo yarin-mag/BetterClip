@@ -44,4 +44,19 @@ final class PreferencesTests: XCTestCase {
         testDefaults.set(0, forKey: "historyLimit")
         XCTAssertEqual(prefs.historyLimit, 200)
     }
+    
+    func testLastSnippetFolderId_missingKey_returnsNil() {
+        XCTAssertNil(prefs.lastSnippetFolderId)
+    }
+
+    func testLastSnippetFolderId_roundTrips() {
+        prefs.lastSnippetFolderId = 42
+        XCTAssertEqual(prefs.lastSnippetFolderId, 42)
+    }
+
+    func testLastSnippetFolderId_setToNilClearsIt() {
+        prefs.lastSnippetFolderId = 42
+        prefs.lastSnippetFolderId = nil
+        XCTAssertNil(prefs.lastSnippetFolderId)
+    }
 }
